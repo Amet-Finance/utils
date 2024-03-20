@@ -2,6 +2,7 @@ import {ERC20__factory} from "../../../typings/fixed-flex/factories/ERC20__facto
 import {ProviderController} from "../provider";
 import {TokenDetails} from "./types";
 
+
 function getTokenInstance(chainId: number, contractAddress: string, isFallback?: boolean) {
     const {provider} = new ProviderController(chainId, isFallback);
     return ERC20__factory.connect(contractAddress, provider);
@@ -50,10 +51,25 @@ async function getTokenBalance(chainId: number, contractAddress: string, address
     }
 }
 
+async function getAllowance(chainId: number, contractAddress: string, address: string, spender: string, isFallback?: boolean) {
+    try {
+        const contract = getTokenInstance(chainId, contractAddress, isFallback)
+        const allowance = await contract.allowance(address, spender);
+        return allowance.toString();
+    } catch (error: any) {
+        console.error(`getAllowance`, error.message)
+        if (isFallback) {
+            throw Error(error)
+        }
+        return getAllowance(chainId, contractAddress, address, spender, true)
+    }
+}
+
 const Erc20Controller = {
     getTokenInstance,
     getTokenDetails,
-    getTokenBalance
+    getTokenBalance,
+    getAllowance
 }
 
 export default Erc20Controller;
