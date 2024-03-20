@@ -50,10 +50,10 @@ async function getTokenBalance(chainId: number, contractAddress: string, address
     }
 }
 
-const TokenController = {
+const Erc20Controller = {
     getTokenInstance,
     getTokenDetails,
     getTokenBalance
 }
 
-export default TokenController;
+export default Erc20Controller;
