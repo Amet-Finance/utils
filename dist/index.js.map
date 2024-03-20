@@ -1,0 +1,1 @@
+{"version":3,"sources":["../src/index.ts"],"sourcesContent":["function hi() {\n    console.log(\"hi\")\n}\n\nexport {\n    hi\n}\n"],"mappings":";;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA,SAAS,KAAK;AACV,UAAQ,IAAI,IAAI;AACpB;","names":[]}
