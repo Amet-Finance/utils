@@ -1,6 +1,7 @@
 import {ERC20__factory} from "../../../typings/fixed-flex/factories/ERC20__factory";
 import {ProviderController} from "../provider";
 import {TokenDetails} from "./types";
+import {BigNumber} from "ethers";
 
 
 function getTokenInstance(chainId: number, contractAddress: string, isFallback?: boolean) {
@@ -51,6 +52,31 @@ async function getTokenBalance(chainId: number, contractAddress: string, address
     }
 }
 
+async function getTokenBalanceNormalized(chainId: number, contractAddress: string, address: string, decimals?: number, isFallback?: boolean) {
+    try {
+        const contract = getTokenInstance(chainId, contractAddress, isFallback)
+        const pureBalance = await getTokenBalance(chainId, contractAddress, address);
+
+        if (typeof decimals === "undefined" || !Number.isFinite(decimals)) {
+            const preDecimals = await contract.decimals();
+            decimals = Number(preDecimals);
+        }
+        const normalizedBalance = (BigNumber.from(pureBalance).div(BigNumber.from(10).pow(BigNumber.from(decimals)))).toNumber();
+
+        return {
+            pureBalance,
+            normalizedBalance,
+            decimals
+        };
+    } catch (error: any) {
+        console.error(`getTokenBalanceNormalized`, error.message)
+        if (isFallback) {
+            throw Error(error)
+        }
+        return getTokenBalanceNormalized(chainId, contractAddress, address, decimals, true)
+    }
+}
+
 async function getAllowance(chainId: number, contractAddress: string, address: string, spender: string, isFallback?: boolean) {
     try {
         const contract = getTokenInstance(chainId, contractAddress, isFallback)
@@ -69,6 +95,7 @@ const Erc20Controller = {
     getTokenInstance,
     getTokenDetails,
     getTokenBalance,
+    getTokenBalanceNormalized,
     getAllowance
 }
 
