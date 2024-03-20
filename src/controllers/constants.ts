@@ -89,7 +89,15 @@ const RPCsByChain: RpcByChain = {
     },
 }
 
+const CONTRACT_TYPES = {
+    FIXED_FLEX: {
+        ISSUER: "fixed-flex-issuer",
+        BOND: "fixed-flex-bond"
+    }
+}
+
 export {
     RPCsByChain,
-    CHAINS
+    CHAINS,
+    CONTRACT_TYPES
 }

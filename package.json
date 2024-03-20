@@ -1,16 +1,22 @@
 {
   "name": "amet-utils",
-  "version": "1.0.0",
+  "version": "1.1.4",
   "description": "",
   "scripts": {
+    "build:publish": "tsup && npm publish && rm -rf dist",
     "build": "tsup",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "ethers": "^5.7.2"
+  },
   "devDependencies": {
+    "@typechain/ethers-v5": "^11.1.2",
     "tsup": "^8.0.2",
+    "typechain": "^8.3.2",
     "typescript": "^5.4.2"
   },
   "main": "./dist/index.js",
@@ -19,8 +25,5 @@
   "files": [
     "dist",
     "README.md"
-  ],
-  "dependencies": {
-    "ethers": "^5.7.2"
-  }
+  ]
 }
