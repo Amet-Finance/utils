@@ -79,11 +79,18 @@ const RPCsByChain: RpcByChain = {
     // TESTNET
     [CHAINS.Mumbai]: {
         def: [
+            "https://polygon-mumbai.g.alchemy.com/v2/demo",
             "https://rpc.ankr.com/polygon_mumbai",
+            "https://polygon-testnet.public.blastapi.io",
+            "https://polygon-mumbai.blockpi.network/v1/rpc/public",
+            "https://matic-testnet-archive-rpc.bwarelabs.com",
+            "https://matic-mumbai.chainstacklabs.com",
+            "https://g.w.lavanet.xyz:443/gateway/polygon1t/rpc-http/f7ee0000000000000000000000000000",
+            "https://rpc-mumbai.maticvigil.com",
+            "https://endpoints.omniatech.io/v1/matic/mumbai/public",
+
             'https://polygon-mumbai-bor.publicnode.com',
-            // 'https://polygon-testnet.public.blastapi.io', // too many empty blocks
             'https://polygon-mumbai-pokt.nodies.app',
-            // 'https://polygon-mumbai.gateway.tenderly.co'
         ],
         fallback: []
     },
