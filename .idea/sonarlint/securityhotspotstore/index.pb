@@ -15,3 +15,6 @@
 dist/index.js,3/9/394a755a87e58e88b1d2f3f56957a32cfefe9a9a
 >
 dist/index.mjs,f/5/f59d5ef5df74dcfbb6cf828dc281e63c04bfa38a
+:
+
+.gitignore,a/5/a5cc2925ca8258af241be7e5b0381edf30266302
