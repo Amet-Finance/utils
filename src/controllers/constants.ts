@@ -28,7 +28,7 @@ const RPCsByChain: RpcByChain = {
     // TESTNET
     [CHAINS.Mumbai]: {
         def: [
-            "https://polygon-mumbai.g.alchemy.com/v2/demo",
+            // "https://polygon-mumbai.g.alchemy.com/v2/demo", // noNetwork
             "https://rpc.ankr.com/polygon_mumbai",
             "https://polygon-testnet.public.blastapi.io",
             "https://polygon-mumbai.blockpi.network/v1/rpc/public",

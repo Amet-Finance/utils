@@ -15,7 +15,7 @@ class ProviderController {
     }
 
     get provider() {
-        return ethers.getDefaultProvider(this.rpc)
+        return new ethers.providers.JsonRpcProvider(this.rpc)
     }
 
     randomRpc(chainId: number | string, isFallback?: boolean): string {
