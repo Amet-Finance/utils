@@ -6,6 +6,7 @@ const CHAINS = {
     PolygonZKEVM: 1101,
     Bsc: 56,
     Optimism: 10,
+    Base: 8453,
 
     Zeta: 7001,
     Ethereum: 1,
@@ -74,6 +75,15 @@ const RPCsByChain: RpcByChain = {
         fallback: [
             "https://rpc.ankr.com/optimism/74cb08b0ad4e0fc6ef41f8486f6a2b309f11519cf33e8986810642447393cdc2"
         ]
+    },
+    [CHAINS.Base]: {
+        def: [
+            "https://base.llamarpc.com",
+            "wss://base-rpc.publicnode.com",
+            "wss://base.gateway.tenderly.co",
+            "https://base.blockpi.network/v1/rpc/public"
+        ],
+        fallback: []
     },
 
     // TESTNET

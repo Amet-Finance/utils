@@ -5,6 +5,8 @@ function getIssuerContract(chainId: number) {
     return issuerContracts[issuerContracts.length - 1]
 }
 
-export default {
+const Utils = {
     getIssuerContract
 }
+
+export default Utils;
