@@ -36,7 +36,7 @@ const RPCsByChain: RpcByChain = {
             // "https://matic-mumbai.chainstacklabs.com", // noNetwork
             "https://g.w.lavanet.xyz:443/gateway/polygon1t/rpc-http/f7ee0000000000000000000000000000",
             // "https://rpc-mumbai.maticvigil.com", // noNetwork
-            "https://endpoints.omniatech.io/v1/matic/mumbai/public",
+            // "https://endpoints.omniatech.io/v1/matic/mumbai/public", //noNetwork
 
             'https://polygon-mumbai-bor.publicnode.com',
             'https://polygon-mumbai-pokt.nodies.app',

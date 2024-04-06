@@ -1,6 +1,6 @@
 {
   "name": "amet-utils",
-  "version": "1.4.6",
+  "version": "1.4.9",
   "description": "",
   "scripts": {
     "build:publish": "tsup && npm publish && rm -rf dist",

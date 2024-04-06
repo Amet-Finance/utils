@@ -15,6 +15,7 @@ class ProviderController {
     }
 
     get provider() {
+        if (this.rpc.startsWith("wss")) return new ethers.providers.WebSocketProvider(this.rpc)
         return new ethers.providers.JsonRpcProvider(this.rpc)
     }
 
