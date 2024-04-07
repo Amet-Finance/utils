@@ -5,6 +5,10 @@ import {IssuerDetails} from "./types";
 import FixedFlexVaultController from "../vault";
 import {Provider} from "@ethersproject/providers";
 
+function getIssuerInterface() {
+    return Issuer__factory.createInterface();
+}
+
 function getIssuerInstance(chainId: number, contractAddress: string, isFallback?: boolean, provider?: Provider) {
     if (provider && !isFallback) {
         return Issuer__factory.connect(contractAddress, provider);
@@ -73,6 +77,7 @@ function decode(chainId: number, transaction: TransactionReceipt) {
 
 
 const FixedFlexIssuerController = {
+    getIssuerInterface,
     getIssuerInstance,
     getVaultContract,
     getIssuerDetails,

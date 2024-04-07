@@ -3,6 +3,10 @@ import {Vault__factory} from "../../../../typings/fixed-flex";
 import {VaultFeeDetails} from "./types";
 import {Provider} from "@ethersproject/providers";
 
+function getVaultInterface() {
+    return Vault__factory.createInterface();
+}
+
 function getVaultInstance(chainId: number, contractAddress: string, isFallback?: boolean, provider?: Provider) {
     if (provider && !isFallback) {
         return Vault__factory.connect(contractAddress, provider);
@@ -80,6 +84,7 @@ async function getBondFeeDetails(chainId: number, vaultAddress: string, bondAddr
 
 
 const FixedFlexVaultController = {
+    getVaultInterface,
     getVaultInstance,
     getVaultFeeDetails,
     getReferralRewards,

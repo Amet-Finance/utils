@@ -5,6 +5,10 @@ import {BondDetails, BondDynamicDetails, BondIssuanceDetails} from "./types";
 import {TransactionReceipt} from "@ethersproject/abstract-provider";
 import {Provider} from "@ethersproject/providers";
 
+function getBondInterface() {
+    return Bond__factory.createInterface();
+}
+
 function getBondInstance(chainId: number, contractAddress: string, isFallback?: boolean, provider?: Provider) {
     if (provider && !isFallback) {
         return Bond__factory.connect(contractAddress, provider)
@@ -107,6 +111,7 @@ async function getIssuanceBondDetails(chainId: number, contractAddress: string, 
 
 
 const FixedFlexBondController = {
+    getBondInterface,
     getBondInstance,
     getBondDetails,
     getBondDynamicDetails,
