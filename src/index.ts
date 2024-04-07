@@ -10,7 +10,7 @@ import {VaultFeeDetails} from "./controllers/fixed-flex/vault/types";
 import {Bond__factory, Issuer__factory, Vault__factory} from "../typings/fixed-flex";
 import Erc20Controller from "./controllers/erc20";
 import {CHAINS, CONTRACT_TYPES, RPCsByChain} from "./controllers/constants";
-import {ProviderController} from "./controllers/provider";
+import ProviderController from "./controllers/provider";
 import constants from "./constants";
 import utils from './utils'
 

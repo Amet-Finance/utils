@@ -16,18 +16,21 @@ const CHAINS = {
 
 const RPCsByChain: RpcByChain = {
     [CHAINS.Base]: {
-        def: [
+        http: [
+            "https://mainnet.base.org/",
             "https://base.llamarpc.com",
+            "https://base.blockpi.network/v1/rpc/public"
+        ],
+        wss: [
             "wss://base-rpc.publicnode.com",
             "wss://base.gateway.tenderly.co",
-            "https://base.blockpi.network/v1/rpc/public"
         ],
         fallback: []
     },
 
     // TESTNET
     [CHAINS.Mumbai]: {
-        def: [
+        http: [
             // "https://polygon-mumbai.g.alchemy.com/v2/demo", // noNetwork
             "https://rpc.ankr.com/polygon_mumbai",
             "https://polygon-testnet.public.blastapi.io",
@@ -41,72 +44,9 @@ const RPCsByChain: RpcByChain = {
             'https://polygon-mumbai-bor.publicnode.com',
             'https://polygon-mumbai-pokt.nodies.app',
         ],
+        wss: [],
         fallback: []
     },
-
-
-
-    [CHAINS.Polygon]: {
-        def: [
-            "https://polygon.llamarpc.com",
-            "https://polygon-rpc.com",
-            "https://rpc.ankr.com/polygon"
-        ],
-        fallback: [
-            "https://rpc.ankr.com/polygon/74cb08b0ad4e0fc6ef41f8486f6a2b309f11519cf33e8986810642447393cdc2"
-        ]
-    },
-    [CHAINS.PolygonZKEVM]: {
-        def: [
-            "https://zkevm-rpc.com",
-            "https://polygon-zkevm.drpc.org",
-            "https://rpc.polygon-zkevm.gateway.fm",
-            "https://polygon-zkevm.drpc.org",
-            "https://zkevm-rpc.com",
-            "https://polygon-zkevm.blockpi.network/v1/rpc/public"
-        ],
-        fallback: [
-            "https://rpc.ankr.com/polygon_zkevm/74cb08b0ad4e0fc6ef41f8486f6a2b309f11519cf33e8986810642447393cdc2"
-        ]
-    },
-    [CHAINS.MantaPacific]: {
-        def: [
-            "https://pacific-rpc.manta.network/http",
-            "https://1rpc.io/manta"
-        ],
-        fallback: []
-    },
-    [CHAINS.Bsc]: {
-        def: [
-            "https://binance.llamarpc.com",
-            "https://bsc-dataseed1.defibit.io",
-            "https://bsc.publicnode.com",
-            "https://rpc.ankr.com/bsc"
-        ],
-        fallback: [
-            "https://rpc.ankr.com/bsc/74cb08b0ad4e0fc6ef41f8486f6a2b309f11519cf33e8986810642447393cdc2"
-        ]
-    },
-    [CHAINS.Zeta]: {
-        def: [
-            "https://rpc.ankr.com/zetachain_evm_athens_testnet"
-        ],
-        fallback: [
-            "https://rpc.ankr.com/zetachain_evm_athens_testnet/74cb08b0ad4e0fc6ef41f8486f6a2b309f11519cf33e8986810642447393cdc2"
-        ]
-    },
-    [CHAINS.Optimism]: {
-        def: [
-            "https://optimism.llamarpc.com",
-            "https://rpc.ankr.com/optimism",
-            "https://mainnet.optimism.io",
-            "https://op-pokt.nodies.app",
-            "https://optimism.publicnode.com"
-        ],
-        fallback: [
-            "https://rpc.ankr.com/optimism/74cb08b0ad4e0fc6ef41f8486f6a2b309f11519cf33e8986810642447393cdc2"
-        ]
-    }
 }
 
 const CONTRACT_TYPES = {

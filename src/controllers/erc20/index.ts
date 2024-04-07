@@ -1,24 +1,27 @@
 import {ERC20__factory} from "../../../typings/fixed-flex/factories/ERC20__factory";
-import {ProviderController} from "../provider";
+import ProviderController from "../provider";
 import {TokenDetails} from "./types";
 import {BigNumber} from "ethers";
 
 
 function getTokenInstance(chainId: number, contractAddress: string, isFallback?: boolean) {
-    const {provider} = new ProviderController(chainId, isFallback);
+    const {provider} = new ProviderController(chainId, isFallback ? "fallback" : "http");
     return ERC20__factory.connect(contractAddress, provider);
 }
 
 async function getTokenDetails(chainId: number, contractAddress: string, isFallback?: boolean): Promise<TokenDetails> {
     try {
+
+        const instance = getTokenInstance(chainId, contractAddress, isFallback)
+
         const [
             name,
             symbol,
             decimals
         ] = await Promise.all([
-            getTokenInstance(chainId, contractAddress, isFallback).name(),
-            getTokenInstance(chainId, contractAddress, isFallback).symbol(),
-            getTokenInstance(chainId, contractAddress, isFallback).decimals()
+            instance.name(),
+            instance.symbol(),
+            instance.decimals()
         ])
 
         return {
@@ -31,9 +34,7 @@ async function getTokenDetails(chainId: number, contractAddress: string, isFallb
         };
     } catch (error: any) {
         console.error(`getTokenInfo`, error.message)
-        if (isFallback) {
-            throw Error(error)
-        }
+        if (isFallback) throw Error(error)
         return getTokenDetails(chainId, contractAddress, true)
     }
 }
@@ -54,10 +55,10 @@ async function getTokenBalance(chainId: number, contractAddress: string, address
 
 async function getTokenBalanceNormalized(chainId: number, contractAddress: string, address: string, decimals?: number, isFallback?: boolean) {
     try {
-        const contract = getTokenInstance(chainId, contractAddress, isFallback)
         const pureBalance = await getTokenBalance(chainId, contractAddress, address);
 
         if (typeof decimals === "undefined" || !Number.isFinite(decimals)) {
+            const contract = getTokenInstance(chainId, contractAddress, isFallback)
             const preDecimals = await contract.decimals();
             decimals = Number(preDecimals);
         }

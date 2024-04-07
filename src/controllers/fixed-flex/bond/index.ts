@@ -1,16 +1,23 @@
-import {ProviderController} from "../../provider";
+import ProviderController from "../../provider";
 import {Bond__factory} from "../../../../typings/fixed-flex";
 import {CONTRACT_TYPES} from "../../constants";
 import {BondDetails, BondDynamicDetails, BondIssuanceDetails} from "./types";
 import {TransactionReceipt} from "@ethersproject/abstract-provider";
+import {Provider} from "@ethersproject/providers";
 
-function getBondInstance(chainId: number, contractAddress: string, isFallback?: boolean) {
-    const {provider} = new ProviderController(chainId, isFallback);
-    return Bond__factory.connect(contractAddress, provider)
+function getBondInstance(chainId: number, contractAddress: string, isFallback?: boolean, provider?: Provider) {
+    if (provider && !isFallback) {
+        return Bond__factory.connect(contractAddress, provider)
+    } else {
+        const {provider} = new ProviderController(chainId, isFallback ? "fallback" : "http");
+        return Bond__factory.connect(contractAddress, provider)
+    }
 }
 
-async function getBondDetails(chainId: number, contractAddress: string, isFallback?: boolean): Promise<BondDetails> {
+async function getBondDetails(chainId: number, contractAddress: string, isFallback?: boolean, provider?: Provider): Promise<BondDetails> {
     try {
+        const instance = getBondInstance(chainId, contractAddress, isFallback, provider)
+
         const [
             lifecycle,
             owner,
@@ -19,12 +26,12 @@ async function getBondDetails(chainId: number, contractAddress: string, isFallba
             payoutToken,
             payoutAmount,
         ] = await Promise.all([
-            getBondInstance(chainId, contractAddress, isFallback).lifecycle(),
-            getBondInstance(chainId, contractAddress, isFallback).owner(),
-            getBondInstance(chainId, contractAddress, isFallback).purchaseToken(),
-            getBondInstance(chainId, contractAddress, isFallback).purchaseAmount(),
-            getBondInstance(chainId, contractAddress, isFallback).payoutToken(),
-            getBondInstance(chainId, contractAddress, isFallback).payoutAmount()
+            instance.lifecycle(),
+            instance.owner(),
+            instance.purchaseToken(),
+            instance.purchaseAmount(),
+            instance.payoutToken(),
+            instance.payoutAmount()
         ]);
 
         return {
@@ -59,9 +66,9 @@ async function getBondDetails(chainId: number, contractAddress: string, isFallba
     }
 }
 
-async function getBondDynamicDetails(chainId: number, contractAddress: string, isFallback?: boolean): Promise<BondDynamicDetails> {
+async function getBondDynamicDetails(chainId: number, contractAddress: string, isFallback?: boolean, provider?: Provider): Promise<BondDynamicDetails> {
     try {
-        const contract = FixedFlexBondController.getBondInstance(chainId, contractAddress);
+        const contract = getBondInstance(chainId, contractAddress, isFallback, provider);
 
         const lifecycle = await contract.lifecycle();
         const owner = await contract.owner();
@@ -86,9 +93,9 @@ async function getBondDynamicDetails(chainId: number, contractAddress: string, i
 }
 
 async function getIssuanceBondDetails(chainId: number, contractAddress: string, transaction: TransactionReceipt, isFallback?: boolean): Promise<BondIssuanceDetails> {
-    const {provider} = new ProviderController(chainId, isFallback);
+    const {provider} = new ProviderController(chainId, isFallback ? "fallback" : "http");
 
-    const bondDetails = await getBondDetails(chainId, contractAddress, isFallback)
+    const bondDetails = await getBondDetails(chainId, contractAddress, isFallback, provider)
     const block = await provider.getBlock(transaction.blockNumber);
 
     return {

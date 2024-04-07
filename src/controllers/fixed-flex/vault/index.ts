@@ -1,20 +1,27 @@
-import {ProviderController} from "../../provider";
+import ProviderController from "../../provider";
 import {Vault__factory} from "../../../../typings/fixed-flex";
 import {VaultFeeDetails} from "./types";
+import {Provider} from "@ethersproject/providers";
 
-function getVaultInstance(chainId: number, contractAddress: string, isFallback?: boolean) {
-    const {provider} = new ProviderController(chainId, isFallback);
-    return Vault__factory.connect(contractAddress, provider);
+function getVaultInstance(chainId: number, contractAddress: string, isFallback?: boolean, provider?: Provider) {
+    if (provider && !isFallback) {
+        return Vault__factory.connect(contractAddress, provider);
+    } else {
+        const {provider} = new ProviderController(chainId, isFallback ? "fallback" : 'http');
+        return Vault__factory.connect(contractAddress, provider);
+    }
 }
 
-async function getVaultFeeDetails(chainId: number, contractAddress: string, isFallback?: boolean): Promise<VaultFeeDetails> {
+async function getVaultFeeDetails(chainId: number, contractAddress: string, isFallback?: boolean, provider?: Provider): Promise<VaultFeeDetails> {
     try {
+        const instance = getVaultInstance(chainId, contractAddress, isFallback, provider)
+
         const [
             issuanceFee,
             initialBondFeeDetails
         ] = await Promise.all([
-            getVaultInstance(chainId, contractAddress, isFallback).issuanceFee(),
-            getVaultInstance(chainId, contractAddress, isFallback).initialBondFeeDetails()
+            instance.issuanceFee(),
+            instance.initialBondFeeDetails()
         ])
 
         return {
@@ -28,13 +35,13 @@ async function getVaultFeeDetails(chainId: number, contractAddress: string, isFa
         if (isFallback) {
             throw Error(error)
         }
-        return getVaultFeeDetails(chainId, contractAddress, true);
+        return getVaultFeeDetails(chainId, contractAddress, true, provider);
     }
 }
 
-async function getReferralRewards(chainId: number, vaultAddress: string, bondAddress: string, referrer: string, isFallback?: boolean) {
+async function getReferralRewards(chainId: number, vaultAddress: string, bondAddress: string, referrer: string, isFallback?: boolean, provider?: Provider) {
     try {
-        const vaultContract = getVaultInstance(chainId, vaultAddress, isFallback);
+        const vaultContract = getVaultInstance(chainId, vaultAddress, isFallback, provider);
         return await vaultContract.getReferrerData(bondAddress, referrer);
     } catch (error: any) {
         console.error(`getReferralRewards`, error.message);
@@ -45,9 +52,9 @@ async function getReferralRewards(chainId: number, vaultAddress: string, bondAdd
     }
 }
 
-async function isAddressRestricted(chainId: number, vaultAddress: string, referrer: string, isFallback?: boolean) {
+async function isAddressRestricted(chainId: number, vaultAddress: string, referrer: string, isFallback?: boolean, provider?: Provider) {
     try {
-        const vaultContract = getVaultInstance(chainId, vaultAddress, isFallback);
+        const vaultContract = getVaultInstance(chainId, vaultAddress, isFallback, provider);
         return await vaultContract.isAddressRestricted(referrer);
     } catch (error: any) {
         console.error(`isAddressRestricted`, error.message);
@@ -58,9 +65,9 @@ async function isAddressRestricted(chainId: number, vaultAddress: string, referr
     }
 }
 
-async function getBondFeeDetails(chainId: number, vaultAddress: string, bondAddress: string, isFallback?: boolean) {
+async function getBondFeeDetails(chainId: number, vaultAddress: string, bondAddress: string, isFallback?: boolean, provider?: Provider) {
     try {
-        const vaultContract = getVaultInstance(chainId, vaultAddress, isFallback);
+        const vaultContract = getVaultInstance(chainId, vaultAddress, isFallback, provider);
         return await vaultContract.getBondFeeDetails(bondAddress);
     } catch (error: any) {
         console.error(`getBondFeeDetails`, error.message);
