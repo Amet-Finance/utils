@@ -96,8 +96,10 @@ async function getBondDynamicDetails(chainId: number, contractAddress: string, i
     }
 }
 
-async function getIssuanceBondDetails(chainId: number, contractAddress: string, transaction: TransactionReceipt, isFallback?: boolean): Promise<BondIssuanceDetails> {
-    const {provider} = new ProviderController(chainId, isFallback ? "fallback" : "http");
+async function getIssuanceBondDetails(chainId: number, contractAddress: string, transaction: TransactionReceipt, isFallback?: boolean, provider?: Provider): Promise<BondIssuanceDetails> {
+    if (!provider) {
+        provider = new ProviderController(chainId, isFallback ? "fallback" : "http").provider;
+    }
 
     const bondDetails = await getBondDetails(chainId, contractAddress, isFallback, provider)
     const block = await provider.getBlock(transaction.blockNumber);

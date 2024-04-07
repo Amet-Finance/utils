@@ -2,17 +2,25 @@ import {ERC20__factory} from "../../../typings/fixed-flex/factories/ERC20__facto
 import ProviderController from "../provider";
 import {TokenDetails} from "./types";
 import {BigNumber} from "ethers";
+import {Provider} from "@ethersproject/providers";
 
-
-function getTokenInstance(chainId: number, contractAddress: string, isFallback?: boolean) {
-    const {provider} = new ProviderController(chainId, isFallback ? "fallback" : "http");
-    return ERC20__factory.connect(contractAddress, provider);
+function getTokenInterface() {
+    return ERC20__factory.createInterface();
 }
 
-async function getTokenDetails(chainId: number, contractAddress: string, isFallback?: boolean): Promise<TokenDetails> {
+function getTokenInstance(chainId: number, contractAddress: string, isFallback?: boolean, provider?: Provider) {
+    if (provider && !isFallback) {
+        return ERC20__factory.connect(contractAddress, provider);
+    } else {
+        const {provider} = new ProviderController(chainId, isFallback ? "fallback" : "http");
+        return ERC20__factory.connect(contractAddress, provider);
+    }
+}
+
+async function getTokenDetails(chainId: number, contractAddress: string, isFallback?: boolean, provider?: Provider): Promise<TokenDetails> {
     try {
 
-        const instance = getTokenInstance(chainId, contractAddress, isFallback)
+        const instance = getTokenInstance(chainId, contractAddress, isFallback, provider)
 
         const [
             name,
@@ -39,9 +47,9 @@ async function getTokenDetails(chainId: number, contractAddress: string, isFallb
     }
 }
 
-async function getTokenBalance(chainId: number, contractAddress: string, address: string, isFallback?: boolean): Promise<string> {
+async function getTokenBalance(chainId: number, contractAddress: string, address: string, isFallback?: boolean, provider?: Provider): Promise<string> {
     try {
-        const contract = getTokenInstance(chainId, contractAddress, isFallback)
+        const contract = getTokenInstance(chainId, contractAddress, isFallback, provider)
         const balance = await contract.balanceOf(address);
         return balance.toString();
     } catch (error: any) {
@@ -53,12 +61,16 @@ async function getTokenBalance(chainId: number, contractAddress: string, address
     }
 }
 
-async function getTokenBalanceNormalized(chainId: number, contractAddress: string, address: string, decimals?: number, isFallback?: boolean) {
+async function getTokenBalanceNormalized(chainId: number, contractAddress: string, address: string, decimals?: number, isFallback?: boolean, provider?: Provider) {
     try {
-        const pureBalance = await getTokenBalance(chainId, contractAddress, address);
+        if (!provider) {
+            provider = new ProviderController(chainId, isFallback ? "fallback" : "http").provider
+        }
+
+        const pureBalance = await getTokenBalance(chainId, contractAddress, address, isFallback, provider);
 
         if (typeof decimals === "undefined" || !Number.isFinite(decimals)) {
-            const contract = getTokenInstance(chainId, contractAddress, isFallback)
+            const contract = getTokenInstance(chainId, contractAddress, isFallback, provider)
             const preDecimals = await contract.decimals();
             decimals = Number(preDecimals);
         }
@@ -78,9 +90,9 @@ async function getTokenBalanceNormalized(chainId: number, contractAddress: strin
     }
 }
 
-async function getAllowance(chainId: number, contractAddress: string, address: string, spender: string, isFallback?: boolean) {
+async function getAllowance(chainId: number, contractAddress: string, address: string, spender: string, isFallback?: boolean, provider?: Provider) {
     try {
-        const contract = getTokenInstance(chainId, contractAddress, isFallback)
+        const contract = getTokenInstance(chainId, contractAddress, isFallback, provider)
         const allowance = await contract.allowance(address, spender);
         return allowance.toString();
     } catch (error: any) {
@@ -93,6 +105,7 @@ async function getAllowance(chainId: number, contractAddress: string, address: s
 }
 
 const Erc20Controller = {
+    getTokenInterface,
     getTokenInstance,
     getTokenDetails,
     getTokenBalance,
