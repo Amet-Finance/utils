@@ -10,6 +10,7 @@ const CHAINS = {
 
     Zeta: 7001,
     Ethereum: 1,
+    JoltEvmDev: 1730,
 
     Mumbai: 80001,
 }
@@ -18,13 +19,18 @@ const RPCsByChain: RpcByChain = {
     [CHAINS.Base]: {
         http: [
             "https://mainnet.base.org/",
-            "https://base.llamarpc.com",
+            // "https://base.llamarpc.com", // lots of errors
             "https://base.blockpi.network/v1/rpc/public"
         ],
         wss: [
             "wss://base-rpc.publicnode.com",
             "wss://base.gateway.tenderly.co",
         ],
+        fallback: []
+    },
+    [CHAINS.JoltEvmDev]: {
+        http: ["http://65.109.48.184:8555/"],
+        wss: [],
         fallback: []
     },
 
