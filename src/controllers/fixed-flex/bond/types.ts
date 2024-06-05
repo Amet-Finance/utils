@@ -10,7 +10,6 @@ type BondDynamicDetails = {
 
 type BondDetails = BondDynamicDetails & {
     _id: string,
-    type: string,
     chainId: number,
     issuer: string,
 

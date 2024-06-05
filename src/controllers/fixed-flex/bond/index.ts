@@ -1,6 +1,5 @@
 import ProviderController from "../../provider";
 import {Bond__factory} from "../../../../typings/fixed-flex";
-import {CONTRACT_TYPES} from "../../constants";
 import {BondDetails, BondDynamicDetails, BondIssuanceDetails} from "./types";
 import {TransactionReceipt} from "@ethersproject/abstract-provider";
 import {Provider} from "@ethersproject/providers";
@@ -40,7 +39,6 @@ async function getBondDetails(chainId: number, contractAddress: string, isFallba
 
         return {
             _id: `${contractAddress}_${chainId}`.toLowerCase(),
-            type: CONTRACT_TYPES.FIXED_FLEX.BOND,
             chainId: chainId,
             issuer: owner.toLowerCase(),
             owner: owner.toLowerCase(),
